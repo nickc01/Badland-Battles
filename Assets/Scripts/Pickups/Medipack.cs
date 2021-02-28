@@ -12,6 +12,7 @@ public sealed class Medipack : Pickup
 
 	public override void OnPickup(CharacterController sourceCharacter)
 	{
+		//On pickup, heal the character
 		sourceCharacter.GetComponent<Health>().Heal(healAmount);
 	}
 }

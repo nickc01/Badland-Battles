@@ -2,14 +2,17 @@
 
 public sealed class AmmoHUD : ColorScrollHUD
 {
+	//The singleton for accessing the HUD anywhere
 	public static AmmoHUD Instance { get; private set; }
 
 	int currentAmmo = 15;
 
+	//The maximum amount of ammo the character can hold
 	public int MaximumAmmo { get; private set; } = 15;
 
 	private void Awake()
 	{
+		//Set the singleton
 		Instance = this;
 	}
 
@@ -20,6 +23,7 @@ public sealed class AmmoHUD : ColorScrollHUD
 	public void UpdateAmmoRaw(int newValue)
 	{
 		currentAmmo = newValue;
+		//Set the color progress bar without doing any animations
 		SetColorProgressRaw(currentAmmo,MaximumAmmo);
 	}
 
@@ -30,6 +34,7 @@ public sealed class AmmoHUD : ColorScrollHUD
 	public void SetMaxAmmo(int max)
 	{
 		MaximumAmmo = max;
+		//Update the color progress bar
 		SetColorProgress(currentAmmo, MaximumAmmo);
 	}
 
@@ -40,6 +45,7 @@ public sealed class AmmoHUD : ColorScrollHUD
 	public void UpdateAmmo(int newValue)
 	{
 		currentAmmo = newValue;
+		//Update the color progress bar
 		SetColorProgress(currentAmmo, MaximumAmmo);
 	}
 }

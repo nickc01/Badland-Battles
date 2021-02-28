@@ -5,17 +5,18 @@ using UnityEngine;
 
 public sealed class HealthHUD : ColorScrollHUD
 {
+	//A singleton for the health HUD so it can be accessed anywhere
 	public static HealthHUD Instance { get; private set; }
 
-	[SerializeField]
-	int maximumHealth = 100;
-
+	//The current health to be displayed
 	int currentHealth = 100;
 
-	public int MaximumHealth => maximumHealth;
+	//The maximum health to be displayed
+	public int MaximumHealth { get; private set; } = 100;
 
 	private void Awake()
 	{
+		//Set the singleton
 		Instance = this;
 	}
 
@@ -25,8 +26,8 @@ public sealed class HealthHUD : ColorScrollHUD
 	/// <param name="newValue">The new health value</param>
 	public void UpdateHealthRaw(int newValue)
 	{
-		SetMaxHealth(newValue);
-		SetColorProgressRaw(currentHealth,maximumHealth);
+		currentHealth = newValue;
+		SetColorProgressRaw(currentHealth,MaximumHealth);
 	}
 
 	/// <summary>
@@ -35,8 +36,8 @@ public sealed class HealthHUD : ColorScrollHUD
 	/// <param name="max">The maximum value</param>
 	public void SetMaxHealth(int max)
 	{
-		maximumHealth = max;
-		SetColorProgress(currentHealth, maximumHealth);
+		MaximumHealth = max;
+		SetColorProgress(currentHealth, MaximumHealth);
 	}
 
 	/// <summary>
@@ -46,6 +47,6 @@ public sealed class HealthHUD : ColorScrollHUD
 	public void UpdateHealth(int newValue)
 	{
 		currentHealth = newValue;
-		SetColorProgress(currentHealth, maximumHealth);
+		SetColorProgress(currentHealth, MaximumHealth);
 	}
 }

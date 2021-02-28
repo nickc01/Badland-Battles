@@ -5,3 +5,7 @@ Desert : https://assetstore.unity.com/packages/3d/environments/landscapes/desert
 Other Collectables : https://opengameart.org/content/3d-collectable-pack
 Ammo Crate : https://opengameart.org/content/crate-model
 Guns : https://opengameart.org/content/various-small-arms-assault-rifles-sniper-pistol
+Shotgun : https://opengameart.org/content/shotgun-1
+Tank : https://opengameart.org/content/stridsvagn-103
+Bullet Hole : https://opengameart.org/content/bullet-decal
+Gun and Bullet Effects : https://assetstore.unity.com/packages/vfx/particles/war-fx-5669

@@ -10,31 +10,45 @@ public sealed class HealthEvent : UnityEvent<int>
 	
 }
 
-
 public class Health : MonoBehaviour
 {
 	[SerializeField]
+	[Tooltip("The starting health")]
 	int initialHealth = 100;
 
 	[SerializeField]
+	[Tooltip("The maximum health value")]
 	int maxHealth = 100;
 
+	//The current health of the component
+	[SerializeField]
 	int health;
 
 	private void Awake()
 	{
+		//Clamp the initial health to be less than or equal to maxHealth
 		if (initialHealth > maxHealth)
 		{
 			initialHealth = maxHealth;
 		}
+		//Set the initial health
 		health = initialHealth;
+		//Run the onStart event
 		onStart.Invoke(health);
 	}
 
 
-
+	/// <summary>
+	/// The starting health
+	/// </summary>
 	public float InitialHealth => initialHealth;
+	/// <summary>
+	/// The maximum health
+	/// </summary>
 	public float MaxHealth => maxHealth;
+	/// <summary>
+	/// The current health value
+	/// </summary>
 	public float CurrentHealth => health;
 
 	/// <summary>
@@ -76,7 +90,7 @@ public class Health : MonoBehaviour
 	}
 
 
-	#region HEALTH CALLBACKS
+	#region HEALTH EVENTS
 
 	[SerializeField]
 	[Tooltip("Called when the health component starts")]

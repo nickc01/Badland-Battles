@@ -26,8 +26,20 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     [Tooltip("The starting amount of ammo the character has")]
     int startingAmmo;
+    [SerializeField]
+    [Tooltip("How fast the equipped gun should rotate towards the target")]
+    float gunRotationSpeed = 2f;
+    [SerializeField]
+    [Tooltip("The weapon prefab that the character will start with")]
+    Weapon startingWeapon;
 
+    [SerializeField]
+    [Tooltip("The container object that will allow the character to hold the weapon")]
+    Transform weaponContainer;
 
+    //The health of the character
+    Health health;
+    //The rigidbody of the character
     Rigidbody body;
     //The animator for the character
     Animator animator;
@@ -41,8 +53,13 @@ public class CharacterController : MonoBehaviour
     int landingID;
     //The ID used to set the "On Ground" animator parameter
     int onGroundID;
-
+    //The current amount of ammo the character has
     int currentAmmo;
+
+    /// <summary>
+    /// The currently equipped weapon
+    /// </summary>
+    public Weapon EquippedWeapon { get; private set; }
 
     //Whether the character is jumping
     public bool Jumping
@@ -64,12 +81,15 @@ public class CharacterController : MonoBehaviour
         get => !OnGround && !Jumping && body.velocity.y <= 0f;
     }
 
+    //The amount of ammo the character has
     public int Ammo
     {
         get => currentAmmo;
         set
         {
+            //Limit the ammo to be between 0 and maximumAmmo
             currentAmmo = Mathf.Clamp(value, 0, maximumAmmo);
+            //Update the ammo HUD
             AmmoHUD.Instance.UpdateAmmo(currentAmmo);
         }
     }
@@ -77,8 +97,11 @@ public class CharacterController : MonoBehaviour
 
     void Awake()
     {
+        //Get the character's health component
+        health = GetComponent<Health>();
         //Get the character's animator component
         animator = GetComponent<Animator>();
+        //Get the chracter's rigidbody component
         body = GetComponent<Rigidbody>();
         //Get the ID for setting the "Horizontal" animator parameter
         horizontalID = Animator.StringToHash("Horizontal");
@@ -91,9 +114,19 @@ public class CharacterController : MonoBehaviour
         //Get the ID for setting the "Vertical" animator parameter
         onGroundID = Animator.StringToHash("On Ground");
 
+        //Configure the starting ammo
         currentAmmo = startingAmmo;
+
+        //Update the Ammo HUD
         AmmoHUD.Instance.SetMaxAmmo(maximumAmmo);
         AmmoHUD.Instance.UpdateAmmoRaw(startingAmmo);
+
+        //If a starting weapon is specified
+        if (startingWeapon != null)
+        {
+            //Equip the starting weapon
+            EquipWeapon(startingWeapon);
+        }
     }
 
 
@@ -125,12 +158,9 @@ public class CharacterController : MonoBehaviour
             animator.SetFloat(horizontalID, Mathf.Lerp(oldHorizontal, movement.x, AnimationTransitionSpeed * Time.deltaTime));
             animator.SetFloat(verticalID, Mathf.Lerp(oldVertical, movement.z, AnimationTransitionSpeed * Time.deltaTime));
         }
-        //If the character is to face the mouse pointer
-        if (turnTowardsMouse)
-        {
-            //Look at the mouse pointer
-            LookAtMouse();
-        }
+
+        //Look at the mouse pointer and get the target that the mouse is pointing at
+        var target = LookAtMouse();
 
         //If the character is jumping in the air and the character is falling down
         if (Jumping && body.velocity.y <= 0f)
@@ -140,7 +170,7 @@ public class CharacterController : MonoBehaviour
         }
 
         //If we are pressing space or pressing the fire button and the character is on the ground
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1")) && OnGround)
+        if ((Input.GetKeyDown(KeyCode.Space)) && OnGround)
         {
             animator.Play("Jumping");
             //Jump
@@ -149,6 +179,45 @@ public class CharacterController : MonoBehaviour
             OnGround = false;
             //Add a jump force
             body.AddRelativeForce(0f, jumpForce, 0f, ForceMode.Impulse);
+        }
+
+        if (EquippedWeapon != null)
+        {
+            var oldGunRotation = EquippedWeapon.transform.rotation;
+
+            EquippedWeapon.transform.LookAt(target);
+
+            var newGunRotation = EquippedWeapon.transform.rotation;
+
+            //Interpolate the gun's rotation to look at the collision point
+            EquippedWeapon.transform.rotation = Quaternion.Lerp(oldGunRotation, newGunRotation, gunRotationSpeed * Time.deltaTime);
+
+
+            //Zero out any x-rotations on the gun. This ensures that the gun doesn't point towards the ground or at the sky
+            var anglesDegrees = EquippedWeapon.transform.eulerAngles;
+            EquippedWeapon.transform.eulerAngles = new Vector3(0f, anglesDegrees.y, anglesDegrees.z);
+
+            //If there is ammo left and the fire button is pressed
+            if (Ammo > 0 && Input.GetButton("Fire1"))
+            {
+                //Find the muzzle of the equipped weapon
+                var muzzle = EquippedWeapon.transform.Find("Muzzle");
+                //if no muzzle exists, then throw an exception
+                if (muzzle == null)
+                {
+                    throw new System.Exception("Unable to find the Muzzle for the gun " + EquippedWeapon.gameObject.name);
+                }
+                
+                //If the weapon can be fired
+                if (EquippedWeapon.CanFire)
+                {
+                    //Tell the weapon to shoot a bullet.
+                    EquippedWeapon.Shoot(muzzle.transform.position, target);
+                    //Decrease the character's ammo
+                    Ammo -= EquippedWeapon.AmmoPerShot;
+                }
+                
+            }
         }
     }
 
@@ -166,8 +235,8 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    //This function rotates the character to face whereever the mouse pointer is pointing at
-    void LookAtMouse()
+    //This function rotates the character to face whereever the mouse pointer is pointing at. Returns the target the mouse is pointing at
+    Vector3 LookAtMouse()
     {
         //Create a plane the faces upwards at the player's position. This will create a plane that spans the x and z axis
         Plane mousePlane = new Plane(Vector3.up, transform.position);
@@ -192,23 +261,120 @@ public class CharacterController : MonoBehaviour
 
             //Interpolate from the previous rotation to the new rotation
             transform.rotation = Quaternion.Lerp(previousRotation, newRotation, RotationSpeed * Time.deltaTime);
+
+            return collisionPoint;
         }
+
+        return transform.position;
     }
 
-    //If the player collides 
+    //If the player collides with anything
     private void OnCollisionEnter(Collision collision)
     {
+        //Set the on ground variable to true
         OnGround = true;
 
+        //If the collided object has a pickup component
         var pickup = collision.gameObject.GetComponent<Pickup>();
         if (pickup != null)
         {
-            Debug.Log("Touched Pickup = " + pickup.gameObject.name);
+            //Pickup the pickup
             pickup.OnPickup(this);
+            //If the pickup is to be destroyed afterwards, then destroy it
             if (pickup.DestroyOnPickup)
             {
                 Destroy(pickup.gameObject);
             }
         }
+
+        //If the collided object has a "Harm Character" component
+        var harmCharacter = collision.gameObject.GetComponent<HarmCharacter>();
+        if (harmCharacter != null)
+        {
+            //Harm the character
+            health.Damage(harmCharacter.Damage);
+        }
+    }
+
+    //If the player triggers something
+    private void OnTriggerEnter(Collider other)
+    {
+        //If the collided object has a "Harm Character" component
+        var harmCharacter = other.gameObject.GetComponent<HarmCharacter>();
+        if (harmCharacter != null)
+        {
+            //Harm the character
+            health.Damage(harmCharacter.Damage);
+        }
+    }
+
+    //Tells the player to equip a weapon
+    public void EquipWeapon(Weapon weaponPrefab)
+    {
+        //If the player is already holding a weapon, then unequip it
+        if (EquippedWeapon != null)
+        {
+            UnequipWeapon();
+        }
+
+        //Instantiate the weapon
+        EquippedWeapon = GameObject.Instantiate(weaponPrefab);
+
+        //Set the weapon's parent to the weapon container
+        EquippedWeapon.transform.SetParent(weaponContainer);
+        //Reset the local position and local rotation of the weapon
+        EquippedWeapon.transform.localPosition = Vector3.zero;
+        EquippedWeapon.transform.localRotation = Quaternion.identity;
+
+        //Tell the gun that it has been equipped
+        EquippedWeapon.OnEquip(this);
+
+        //Set the "No Weapon" layer to a weight of 0 to stop playing that layer
+        animator.SetLayerWeight(1, 0f);
+    }
+
+    //Tells the player to unequip a weapon
+    public void UnequipWeapon()
+    {
+        //If there is a weapon equipped
+        if (EquippedWeapon != null)
+        {
+            //Tell the gun that is is about to be unequipped
+            EquippedWeapon.OnUnequip(this);
+            //Destroy the weapon
+            Destroy(EquippedWeapon.gameObject);
+            //Nullify the equipped weapon variable
+            EquippedWeapon = null;
+
+            //Set the "No Weapon" layer to a weight of 1 to play the layer
+            animator.SetLayerWeight(1, 1f);
+        }
+    }
+
+    //Called any time the animator is doing inverse kinematics
+    private void OnAnimatorIK(int layerIndex)
+    {
+        //If there is a weapon equipped
+        if (EquippedWeapon != null)
+        {
+            //Use it to setup the character's inverse kinematics
+            EquippedWeapon.SetCharacterIK(animator);
+        }
+        //If there is no equipped weapon
+        else
+        {
+            //Reset Inverse Kinematics
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
+        }
+    }
+
+
+    //Destroys the player. Used for the health OnDeath event
+    public void DestroyPlayer()
+    {
+        Destroy(gameObject);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//The class for the ammo pack pickup
 public sealed class AmmoPack : Pickup
 {
 	[SerializeField]
@@ -7,6 +8,7 @@ public sealed class AmmoPack : Pickup
 
 	public override void OnPickup(CharacterController sourceCharacter)
 	{
+		//On pickup, increase the character's ammo
 		sourceCharacter.Ammo += ammoAmount;
 	}
 }
