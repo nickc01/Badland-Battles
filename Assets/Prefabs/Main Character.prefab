@@ -1865,9 +1865,8 @@ GameObject:
   - component: {fileID: 4481314842705183793}
   - component: {fileID: 8023797921081251431}
   - component: {fileID: 8023797921081251424}
-  - component: {fileID: 8023797921081251428}
   - component: {fileID: 8023797921081251425}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1923,7 +1922,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &8023797921081251424
 CapsuleCollider:
@@ -1939,28 +1938,6 @@ CapsuleCollider:
   m_Height: 1.8884134
   m_Direction: 1
   m_Center: {x: 0, y: 0.9245825, z: 0}
---- !u!114 &8023797921081251428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7177374837381088497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94e259816ff5f994186cf64a924d6eee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MovementSpeed: 3
-  RotationSpeed: 7
-  AnimationTransitionSpeed: 10
-  turnTowardsMouse: 1
-  jumpForce: 5
-  maximumAmmo: 100
-  startingAmmo: 100
-  gunRotationSpeed: 2
-  startingWeapon: {fileID: 0}
-  weaponContainer: {fileID: 8023797922963162990}
 --- !u!114 &8023797921081251425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1975,6 +1952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialHealth: 100
   maxHealth: 100
+  health: 0
   onStart:
     m_PersistentCalls:
       m_Calls:
@@ -2004,7 +1982,31 @@ MonoBehaviour:
         m_CallState: 2
   onDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+        m_MethodName: DestroyPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DeathUI, Assembly-CSharp
+        m_MethodName: ShowDeathText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onHeal:
     m_PersistentCalls:
       m_Calls:

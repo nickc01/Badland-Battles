@@ -3,9 +3,9 @@
 [RequireComponent(typeof(Health))]
 public class EnemyHealthDisplay : MonoBehaviour
 {
-	[SerializeField]
+	/*[SerializeField]
 	[Tooltip("The health marker prefab")]
-	HealthMarker markerPrefab;
+	HealthMarker markerPrefab;*/
 
 	//The health component of the enemy
 	Health health;
@@ -31,7 +31,7 @@ public class EnemyHealthDisplay : MonoBehaviour
 		if (marker == null)
 		{
 			//Create a new marker
-			marker = GameObject.Instantiate(markerPrefab);
+			marker = GameObject.Instantiate(GameManager.Instance.MarkerPrefab);
 			//Set the target to this enemy
 			marker.Target = transform;
 			//Set it's max health value to the enemy's max health

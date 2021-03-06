@@ -8,7 +8,7 @@ public sealed class DoublePistolWeapon : Weapon
 	//Determines if we are shooting from the first gun or the second gun
 	bool shootingFirstMuzzle = true;
 
-	public override void OnEquip(CharacterController character)
+	public override void OnEquip(WeaponUser character)
 	{
 		muzzle1 = transform.Find("Muzzle");
 		muzzle2 = transform.Find("Muzzle 2");

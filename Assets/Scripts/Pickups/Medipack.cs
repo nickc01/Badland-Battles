@@ -10,7 +10,7 @@ public sealed class Medipack : Pickup
 	[SerializeField]
 	int healAmount = 40;
 
-	public override void OnPickup(CharacterController sourceCharacter)
+	public override void OnPickup(PlayerController sourceCharacter)
 	{
 		//On pickup, heal the character
 		sourceCharacter.GetComponent<Health>().Heal(healAmount);

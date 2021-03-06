@@ -14,5 +14,5 @@ public abstract class Pickup : MonoBehaviour
 	/// Called when the character touches the pickup
 	/// </summary>
 	/// <param name="sourceCharacter">The character picking it up</param>
-	public abstract void OnPickup(CharacterController sourceCharacter);
+	public abstract void OnPickup(PlayerController sourceCharacter);
 }

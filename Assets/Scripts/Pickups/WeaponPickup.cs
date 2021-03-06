@@ -15,7 +15,7 @@ public sealed class WeaponPickup : Pickup
 	/// </summary>
 	public Weapon WeaponPrefab => weaponPrefab;
 
-	public override void OnPickup(CharacterController sourceCharacter)
+	public override void OnPickup(PlayerController sourceCharacter)
 	{
 		//On pickup, tell the player to equip the weapon
 		sourceCharacter.EquipWeapon(WeaponPrefab);

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WeaponCommons",menuName = "Weapon Commons")]
+/*[CreateAssetMenu(fileName = "WeaponCommons",menuName = "Weapon Commons")]
 public sealed class WeaponCommons : ScriptableObject
 {
 	[SerializeField]
@@ -37,5 +37,5 @@ public sealed class WeaponCommons : ScriptableObject
 		//Set the singleton
 		Instance = this;
 	}
-}
+}*/
 

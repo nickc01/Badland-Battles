@@ -75,13 +75,13 @@ public abstract class Weapon : MonoBehaviour
 	}
 
 	//Called when the gun is equipped
-	public virtual void OnEquip(CharacterController character)
+	public virtual void OnEquip(WeaponUser character)
 	{
 		
 	}
 
 	//Called when the gun is unequipped
-	public virtual void OnUnequip(CharacterController character)
+	public virtual void OnUnequip(WeaponUser character)
 	{
 		
 	}
@@ -120,7 +120,7 @@ public abstract class Weapon : MonoBehaviour
 	{
 		CanFire = false;
 		//Instantiate a flash at the muzzle
-		var flash = GameObject.Instantiate(WeaponCommons.Instance.GunFirePrefab, source, Quaternion.identity, transform);
+		var flash = GameObject.Instantiate(GameManager.Instance.GunFirePrefab, source, Quaternion.identity, transform);
 		//Get the light component of the flash
 		var flashLight = flash.GetComponent<Light>();
 		//Set the light's intensity and range
@@ -133,11 +133,11 @@ public abstract class Weapon : MonoBehaviour
 		//Fire a raycast and see if it hits something
 		if (Physics.Raycast(source, (target - source).normalized, out var hit))
 		{
-			if (WeaponCommons.Instance.GunRayPrefab != null)
+			if (GameManager.Instance.GunRayPrefab != null)
 			{
 				var halfWayMark = Vector3.Lerp(source,hit.point,0.5f);
 				var distance = Vector3.Distance(source, hit.point);
-				var yellowRay = GameObject.Instantiate(WeaponCommons.Instance.GunRayPrefab, halfWayMark, Quaternion.identity);
+				var yellowRay = GameObject.Instantiate(GameManager.Instance.GunRayPrefab, halfWayMark, Quaternion.identity);
 				yellowRay.transform.LookAt(hit.point);
 
 
@@ -147,9 +147,9 @@ public abstract class Weapon : MonoBehaviour
 
 
 			//If it hit something, then instantiate a hit prefab at wherever it hit (If a hit prefab is configured)
-			if (WeaponCommons.Instance.GunHitPrefab != null)
+			if (GameManager.Instance.GunHitPrefab != null)
 			{
-				var hitFlash = GameObject.Instantiate(WeaponCommons.Instance.GunHitPrefab, hit.point, Quaternion.identity);
+				var hitFlash = GameObject.Instantiate(GameManager.Instance.GunHitPrefab, hit.point, Quaternion.identity);
 				Destroy(hitFlash, flashTime);
 			}
 
