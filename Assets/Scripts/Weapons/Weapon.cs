@@ -110,7 +110,7 @@ public abstract class Weapon : MonoBehaviour
 		//First, get a vector that points in a random direction, and has a length of one (onUnitSphere)
 		//Two, multiply it by the shot accuracy so it's magnitude is equal to the shot accuracy
 		//Three, add it to the target and now the target has some inaccuracy added
-		var adjustedTarget = target + (UnityEngine.Random.onUnitSphere * shotInaccuracy);
+		var adjustedTarget = target + (UnityEngine.Random.onUnitSphere * shotInaccuracy * Vector3.Distance(source,target));
 
 		StartCoroutine(ShootBulletRoutine(source, adjustedTarget));
 	}
@@ -130,30 +130,43 @@ public abstract class Weapon : MonoBehaviour
 		//Destroy the flash after a set amount of time
 		Destroy(flash, flashTime);
 
+		Vector3 hitPoint = Vector3.zero;
+		Transform hitObject = null;
+
 		//Fire a raycast and see if it hits something
 		if (Physics.Raycast(source, (target - source).normalized, out var hit))
 		{
-			if (GameManager.Instance.GunRayPrefab != null)
-			{
-				var halfWayMark = Vector3.Lerp(source,hit.point,0.5f);
-				var distance = Vector3.Distance(source, hit.point);
-				var yellowRay = GameObject.Instantiate(GameManager.Instance.GunRayPrefab, halfWayMark, Quaternion.identity);
-				yellowRay.transform.LookAt(hit.point);
+			hitPoint = hit.point;
+			hitObject = hit.transform;
+		}
+		else
+		{
+			hitPoint = source + ((target - source).normalized * 100f);
+		}
+
+		if (GameManager.Instance.GunRayPrefab != null)
+		{
+			var halfWayMark = Vector3.Lerp(source, hitPoint, 0.5f);
+			var distance = Vector3.Distance(source, hitPoint);
+			var yellowRay = GameObject.Instantiate(GameManager.Instance.GunRayPrefab, halfWayMark, Quaternion.identity);
+			yellowRay.transform.LookAt(hitPoint);
 
 
-				var oldScale = yellowRay.transform.localScale;
-				yellowRay.transform.localScale = new Vector3(oldScale.x,oldScale.y, distance);
-			}
+			var oldScale = yellowRay.transform.localScale;
+			yellowRay.transform.localScale = new Vector3(oldScale.x, oldScale.y, distance);
+		}
 
 
-			//If it hit something, then instantiate a hit prefab at wherever it hit (If a hit prefab is configured)
-			if (GameManager.Instance.GunHitPrefab != null)
-			{
-				var hitFlash = GameObject.Instantiate(GameManager.Instance.GunHitPrefab, hit.point, Quaternion.identity);
-				Destroy(hitFlash, flashTime);
-			}
+		//If it hit something, then instantiate a hit prefab at wherever it hit (If a hit prefab is configured)
+		if (GameManager.Instance.GunHitPrefab != null)
+		{
+			var hitFlash = GameObject.Instantiate(GameManager.Instance.GunHitPrefab, hitPoint, Quaternion.identity);
+			Destroy(hitFlash, flashTime);
+		}
 
-			//If the hit object contains a health component, then subtract from it's health
+		//If the hit object contains a health component, then subtract from it's health
+		if (hitObject != null)
+		{
 			var health = hit.transform.GetComponent<Health>();
 			if (health != null)
 			{

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeOnScreen: 5
-  animationSpeed: 2
+  animationSpeed: 5
   Target: {fileID: 0}
   ScreenOffset: {x: 0, y: 0}
   bottomBar: {fileID: 7475003331916271332}

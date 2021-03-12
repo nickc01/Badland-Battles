@@ -38,26 +38,47 @@ public abstract class WeaponUser : MonoBehaviour
     [Tooltip("These are layers that the weapon user cannot shoot through. Used in the InLineOfSight Function")]
     LayerMask weaponObstacleLayers;
 
+    /// <summary>
+    /// Whether the gun consumes ammo per shot
+    /// </summary>
     public bool GunsRequireAmmo => gunsRequireAmmo;
+    /// <summary>
+    /// Whether the gun should point towards a specific target
+    /// </summary>
     public bool GunPointsTowardsPoint
     {
         get => gunPointsTowardsPoint;
         set => gunPointsTowardsPoint = value;
     }
+    /// <summary>
+    /// How fast the gun rotates towards its target
+    /// </summary>
     public float GunRotationSpeed => gunRotationSpeed;
+    /// <summary>
+    /// Whether the gun should stay level to the ground or not. If set to false, the gun will tilt up and down to aim at a target
+    /// </summary>
     public bool KeepGunLevel
     {
         get => keepGunLevel;
         set => keepGunLevel = value;
     }
+    /// <summary>
+    /// The max ammo the weapon user can hold
+    /// </summary>
     public int MaxAmmo => maxAmmo;
 
+    /// <summary>
+    /// The target the weapon user will be aiming at
+    /// </summary>
     public Vector3 WeaponTarget
     {
         get => weaponTarget;
         set => weaponTarget = value;
     }
 
+    /// <summary>
+    /// The amount of ammo the weapon user has left
+    /// </summary>
     public int Ammo
     {
         get => ammo;
@@ -73,6 +94,9 @@ public abstract class WeaponUser : MonoBehaviour
     }
 
     Animator _animator;
+    /// <summary>
+    /// The animator for the weapon user
+    /// </summary>
     public Animator animator
     {
         get
@@ -85,9 +109,14 @@ public abstract class WeaponUser : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// The container that will allow the user to hold the weapon
+    /// </summary>
     public Transform WeaponContainer => weaponContainer;
 
+    /// <summary>
+    /// Whether the gun can be fired right now
+    /// </summary>
     public bool CanFireWeapon => EquippedWeapon != null && EquippedWeapon.CanFire && (!GunsRequireAmmo || Ammo >= EquippedWeapon.AmmoPerShot);
 
     /// <summary>
@@ -219,6 +248,11 @@ public abstract class WeaponUser : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Determines if the user can see the specified target
+    /// </summary>
+    /// <param name="target">The target to look at</param>
+    /// <returns>Returns whether it can see the target or not</returns>
     public bool InLineOfSight(Vector3 target)
     {
         if (EquippedWeapon == null)
@@ -237,12 +271,10 @@ public abstract class WeaponUser : MonoBehaviour
 
         if (Physics.Raycast(ray,Vector3.Distance(target,muzzle.transform.position), weaponObstacleLayers.value))
         {
-            //Debug.Log("In line of sight " + true.ToString());
             return false;
         }
         else
         {
-            //Debug.Log("In line of sight " + false.ToString());
             return true;
         }
     }

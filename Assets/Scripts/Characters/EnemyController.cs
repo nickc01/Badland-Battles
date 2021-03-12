@@ -26,24 +26,30 @@ public class EnemyController : Character
 	[Tooltip("How fast the enemy should rotate towards the target")]
 	float rotationSpeed = 5f;
 
-
+	//The nav mesh of the enemy
 	NavMeshAgent navAgent;
 
+	//The target the enemy will move towards
 	public Transform Target
 	{
 		get => target;
 		set => target = value;
 	}
 
+	//Called when the enemy starts
 	private void Awake()
 	{
+		//Get the enemy's nav mesh
 		navAgent = GetComponent<NavMeshAgent>();
 
+		//If the enemy has a starting weapon
 		if (startingWeapon != null)
 		{
+			//Equip the weapon
 			EquipWeapon(startingWeapon);
 		}
 
+		//Set the main target to the player
 		Target = PlayerController.Instance.transform;
 	}
 
@@ -51,26 +57,17 @@ public class EnemyController : Character
 	protected override void Update()
 	{
 		base.Update();
-
-		//Debug.Log("Before Has ROot Motion Before = " + animator.applyRootMotion);
-
-		//animator.applyRootMotion = true;
-
-		//Debug.Log("Has ROot Motion After = " + animator.applyRootMotion);
-		if (target != null)
+		//If the target is set and the nav mesh is enabled
+		if (target != null && navAgent.enabled)
 		{
+			//Make the nav mesh move to the target
 			navAgent.SetDestination(target.position);
 		}
 
-		//Get the vector towards the target
-		if (target != null)
+		//If the enemy is not dead and a target is set
+		if (!IsDead && target != null)
 		{
-			var toTarget = target.position + targetOffset - transform.position;
-
-			//Debug.DrawLine(transform.position, transform.position + navAgent.desiredVelocity, Color.red);
-			Debug.DrawLine(transform.position, transform.position + toTarget, Color.yellow);
-			//The movement vector along the X and Z axis
-			//Vector3 movementVector = new Vector3(toTarget.x, 0f, toTarget.z);
+			//Get the velocity the nav mesh wants to move at
 			Vector3 movementVector = navAgent.desiredVelocity;
 
 			//Normalize the vector to a length of 1
@@ -79,48 +76,42 @@ public class EnemyController : Character
 			//Convert it from local-space coordinates to world-space coordinates so the animator can move in the correct direction
 			movementVector = transform.InverseTransformDirection(movementVector);
 
+			//Set the enemy's movement to the movement vector
 			Movement = new Vector2(movementVector.x, movementVector.z);
 
-			Debug.DrawLine(transform.position, transform.position + (Vector3)(Movement * 10f), Color.white);
-
+			//If the target is within shooting range
 			if (Vector3.Distance(transform.position, target.position + targetOffset) <= shootingRange)
 			{
+				//Look towards the target
 				LookAt(target.position + targetOffset);
 
+				//If the weapon can be fired and the enemy is within line of sight
 				if (CanFireWeapon && InLineOfSight(target.position + targetOffset))
 				{
+					//Fire the weapon
 					FireWeapon(target.position + targetOffset);
 				}
 			}
+			//If the target is not within shooting range
 			else
 			{
 				//Look at the direction the enemy is traveling in
-				LookAt(transform.position + toTarget);
+				LookAt(transform.position + navAgent.desiredVelocity);
 			}
 		}
+		//If the enemy is dead or the target is not set. Stop the enemy's movement
 		else
 		{
 			Movement = Vector2.zero;
 		}
-
-		//LookAt(target.position);
-
-
-		
 	}
 
+	//Called when the animator wants to apply root motion. This function allows us to customize the root motion behaviour
 	private void OnAnimatorMove()
 	{
+		//Set the nav mesh velocity to be equal to the animation's root motion velocity
 		navAgent.velocity = animator.velocity;
 	}
-
-	//private void OnAnimatorMove()
-	//{
-	//Debug.DrawLine(transform.position, transform.position + navAgent.velocity, Color.green);
-	//Debug.DrawLine(transform.position, transform.position + animator.velocity, Color.blue);
-	//navAgent.velocity = animator.velocity;
-	//navAgent.velocity = Movement;
-	//}
 
 	//Rotates a target on the y-axis to look at a target
 	void LookAt(Vector3 target)

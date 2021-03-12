@@ -225,7 +225,7 @@ MonoBehaviour:
   flashRange: 5
   flashTime: 0.03
   bulletDamage: 5
-  shotInaccuracy: 1.5
+  shotInaccuracy: 0.15
   fireRate: 1
   ammoPerShot: 5
   amountOfShots: 5

@@ -143,7 +143,7 @@ MonoBehaviour:
   flashRange: 5
   flashTime: 0.03
   bulletDamage: 5
-  shotAccuracy: 0.8
+  shotInaccuracy: 0.1
   fireRate: 10
   ammoPerShot: 1
 --- !u!1 &6312474104799599247
@@ -271,7 +271,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3593469880804266650}
-  - component: {fileID: 9031156954604075080}
   - component: {fileID: 2780817511582359243}
   m_Layer: 0
   m_Name: Model
@@ -296,19 +295,6 @@ Transform:
   m_Father: {fileID: 3946382284671019879}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!65 &9031156954604075080
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7386807886161552325}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 9.452398, y: 2.8244643, z: 0.38709354}
-  m_Center: {x: -0.13540983, y: 1.4253602, z: 0.02138021}
 --- !u!114 &2780817511582359243
 MonoBehaviour:
   m_ObjectHideFlags: 0

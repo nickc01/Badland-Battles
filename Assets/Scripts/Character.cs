@@ -20,8 +20,9 @@ public abstract class Character : WeaponUser
 	[SerializeField]
 	float AnimationTransitionSpeed = 3f;
 
-
-	Vector2 movement;
+	//The internal field for the movement
+	Vector2 _movement;
+	//A list of all the objects the character has collided with
 	List<GameObject> terrainCollisions = new List<GameObject>();
 	int m_horizontalID;
 	int m_verticalID;
@@ -43,35 +44,40 @@ public abstract class Character : WeaponUser
 	/// <summary>
 	/// Whether the character is on the ground or not
 	/// </summary>
-	public bool OnGround { get; set; }
-	//{
-	
-		/*get
-		{
-			//First, loop over all the objects in the terrain collision list to see if all the objects in there exist
-			for (int i = terrainCollisions.Count - 1; i >= 0; i--)
-			{
-				if (terrainCollisions[i] == null)
-				{
-					terrainCollisions.RemoveAt(i);
-				}
-			}
-			//Return whether the character is colliding with any terrain
-			return terrainCollisions.Count > 0;
-		}*/
-	//}
+	public bool OnGround { get; private set; }
 
 	/// <summary>
 	/// The movement vector that governs horizontal movement. This vector is internally multiplied by <see cref="MovementSpeed"/> when applying it to movement
 	/// </summary>
 	public Vector2 Movement
 	{
-		get => movement;
+		get => _movement;
 		set
 		{
-			movement = value;
+			_movement = value;
 		}
 	}
+
+	/// <summary>
+	/// The health component on the character
+	/// </summary>
+	Health _characterHealth;
+	public Health CharacterHealth
+	{
+		get
+		{
+			if (_characterHealth == null)
+			{
+				_characterHealth = GetComponent<Health>();
+			}
+			return _characterHealth;
+		}
+	}
+
+	/// <summary>
+	/// Whether the character is dead or not
+	/// </summary>
+	public bool IsDead => CharacterHealth.CurrentHealth == 0;
 
 	protected override void Update()
 	{
@@ -83,14 +89,11 @@ public abstract class Character : WeaponUser
 				m_horizontalID = Animator.StringToHash("Horizontal");
 				m_verticalID = Animator.StringToHash("Vertical");
 			}
-			/*if (movement == Vector2.zero)
+
+			//Only move the character if they are not dead
+			if (!IsDead)
 			{
-				animator.SetFloat(m_horizontalID,0f);
-				animator.SetFloat(m_verticalID,0f);
-			}
-			else*/
-			{
-				var animatorMovement = movement * movementSpeed;
+				var animatorMovement = _movement * movementSpeed;
 
 				//Get the old values
 				var oldHorizontal = animator.GetFloat(m_horizontalID);
@@ -100,7 +103,12 @@ public abstract class Character : WeaponUser
 				animator.SetFloat(m_horizontalID, Mathf.Lerp(oldHorizontal, animatorMovement.x, AnimationTransitionSpeed * Time.deltaTime));
 				animator.SetFloat(m_verticalID, Mathf.Lerp(oldVertical, animatorMovement.y, AnimationTransitionSpeed * Time.deltaTime));
 			}
-			
+			else
+			{
+				animator.SetFloat(m_horizontalID, 0f);
+				animator.SetFloat(m_verticalID, 0f);
+			}
+
 		}
 	}
 
@@ -113,6 +121,7 @@ public abstract class Character : WeaponUser
 			//Add it to the list of terrain collisions
 			terrainCollisions.Add(collision.gameObject);
 
+			//Filter out any collisions that no longer exist
 			for (int i = terrainCollisions.Count - 1; i >= 0; i--)
 			{
 				if (terrainCollisions[i] == null)
@@ -121,13 +130,19 @@ public abstract class Character : WeaponUser
 				}
 			}
 
-			//Debug.Log("A - Collisions = " + terrainCollisions.Count);
-
 			if (terrainCollisions.Count == 1)
 			{
-				//Debug.Log("In Air!");
 				OnGround = true;
 			}
+		}
+		
+		//if the collided object has a damager
+		var damager = collision.gameObject.GetComponent<ICharacterDamager>();
+
+		if (damager != null)
+		{
+			//Damage the character
+			damager.OnHit(this);
 		}
 	}
 
@@ -140,6 +155,7 @@ public abstract class Character : WeaponUser
 			//Remove it from the list of terrain collisions
 			terrainCollisions.Remove(collision.gameObject);
 
+			//Filter out any collisions that no longer exist
 			for (int i = terrainCollisions.Count - 1; i >= 0; i--)
 			{
 				if (terrainCollisions[i] == null)
@@ -152,6 +168,19 @@ public abstract class Character : WeaponUser
 			{
 				OnGround = false;
 			}
+		}
+	}
+
+	//Called whenever the character triggers something
+	protected virtual void OnTriggerEnter(Collider other)
+	{
+		//if the collided object has a damager
+		var damager = other.gameObject.GetComponent<ICharacterDamager>();
+
+		if (damager != null)
+		{
+			//Damage the character
+			damager.OnHit(this);
 		}
 	}
 }

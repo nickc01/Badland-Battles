@@ -67,7 +67,7 @@ public class EnemyWaveManager : MonoBehaviour
 		{
 			for (int i = spawnedEnemies.Count - 1; i >= 0; i--)
 			{
-				if (spawnedEnemies == null)
+				if (spawnedEnemies[i] == null)
 				{
 					spawnedEnemies.RemoveAt(i);
 				}
@@ -77,6 +77,9 @@ public class EnemyWaveManager : MonoBehaviour
 	}
 
 	List<EnemyController> spawnedEnemies = new List<EnemyController>();
+	/// <summary>
+	/// The list of currently spawned enemies
+	/// </summary>
 	public IEnumerable<EnemyController> SpawnedEnemies
 	{
 		get
@@ -93,7 +96,9 @@ public class EnemyWaveManager : MonoBehaviour
 
 
 
-
+	/// <summary>
+	/// Called when a new wave starts
+	/// </summary>
 	public event UnityAction<string> OnWaveStart
 	{
 		add => onWaveStart.AddListener(value);
@@ -108,14 +113,19 @@ public class EnemyWaveManager : MonoBehaviour
 
 	IEnumerator WaveRunner()
 	{
+		//Waits for the starting delay
 		yield return new WaitForSeconds(startDelay);
 
+		//Loop over each wave in the wave manager
 		for (CurrentWave = startingWave; CurrentWave < Waves.Count; CurrentWave++)
 		{
+			//Trigger the wave start event
 			onWaveStart.Invoke(Waves[CurrentWave].WaveName);
 
+			//Loop over each of the enemy spawns
 			foreach (var spawn in Waves[CurrentWave].WaveSpawns)
 			{
+				//Get the amount of enemies to spawn
 				var amount = spawn.amountOfEnemies;
 
 				if (amount <= 0)
@@ -123,20 +133,26 @@ public class EnemyWaveManager : MonoBehaviour
 					amount = 1;
 				}
 				EnemiesLeftToSpawn += amount;
+				//Start a new routine to spawn the enemies
 				StartCoroutine(SpawnEnemies(spawn));
 			}
 
+			//Wait until all the enemies have been spawned
 			yield return new WaitUntil(() => EnemiesLeftToSpawn == 0);
+			//Wait until all the enemies are dead
 			yield return new WaitUntil(() => EnemiesLeftAlive == 0);
+			//Wait for the ending delay
 			yield return new WaitForSeconds(Waves[CurrentWave].EndDelay);
 		}
-
 	}
 
+	//Used to spawn the enemies
 	IEnumerator SpawnEnemies(Spawn spawnInfo)
 	{
+		//Wait for the specified delay
 		yield return new WaitForSeconds(spawnInfo.Delay);
 
+		//Get the amount of enemies to spawn
 		var amount = spawnInfo.amountOfEnemies;
 
 		if (amount <= 0)
@@ -144,10 +160,13 @@ public class EnemyWaveManager : MonoBehaviour
 			amount = 1;
 		}
 
+		//Loop over all the enemies to spawn
 		for (int i = 0; i < amount; i++)
 		{
+			//instantiate the enemy at the specified spawner
 			spawnedEnemies.Add(Instantiate(spawnInfo.Enemy,spawnInfo.spawner.transform.position,Quaternion.identity));
 			EnemiesLeftToSpawn--;
+			//Wait for the time between spawns
 			yield return new WaitForSeconds(spawnInfo.timeBetweenSpawns);
 		}
 	}

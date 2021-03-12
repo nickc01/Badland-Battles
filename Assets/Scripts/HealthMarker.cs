@@ -23,6 +23,8 @@ public class HealthMarker : MonoBehaviour
     float health = 100f;
 
 
+    Vector3 lastKnownPosition;
+
     /// <summary>
     /// The maximum health. If the health is equal this this, then the bar will be filled
     /// </summary>
@@ -80,23 +82,22 @@ public class HealthMarker : MonoBehaviour
 
     private void Update()
     {
-        //If there is a target
+        Vector3 position = lastKnownPosition;
+
         if (Target != null)
         {
-            //Get the main camera
-            var camera = Camera.main;
-
-            //Convert the world-coordinates of the target to screen coordinates
-            Vector2 screenCoordinates = (Vector2)camera.WorldToScreenPoint(Target.transform.position) + ScreenOffset;
-
-            //Set the marker to the screen coordinates
-            rectTransform.anchoredPosition = screenCoordinates;
+            position = Target.transform.position;
+            lastKnownPosition = position;
         }
-        //If there is no target, then the target has been destroyed, so delete the marker
-        else
-        {
-            Destroy(gameObject);
-        }
+
+        //Get the main camera
+        var camera = Camera.main;
+
+        //Convert the world-coordinates of the target to screen coordinates
+        Vector2 screenCoordinates = (Vector2)camera.WorldToScreenPoint(position) + ScreenOffset;
+
+        //Set the marker to the screen coordinates
+        rectTransform.anchoredPosition = screenCoordinates;
 
         //Retrieve the new width for the color bar
         float colorBarWidth = Mathf.Lerp(0f, bottomBar.rect.width, health / maxHealth);

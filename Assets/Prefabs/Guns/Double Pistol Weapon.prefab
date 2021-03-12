@@ -306,7 +306,7 @@ MonoBehaviour:
   flashRange: 2
   flashTime: 0.06
   bulletDamage: 5
-  shotAccuracy: 0.4
+  shotInaccuracy: 0.05
   fireRate: 3.75
   ammoPerShot: 1
 --- !u!1 &9048656629391944418
