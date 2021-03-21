@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4864157927164331652}
   - component: {fileID: 1068726226407787932}
   - component: {fileID: 7729368527593661363}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,8 @@ GameObject:
   - component: {fileID: 1729495090394828683}
   - component: {fileID: 4607391926605918222}
   - component: {fileID: 6111627152570870738}
-  m_Layer: 0
+  - component: {fileID: 7553693288818093790}
+  m_Layer: 10
   m_Name: Double Pistol pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,6 +143,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 766671560714249059, guid: 3fc4ddb711788e942b5629ea6ef6c3c2, type: 3}
+--- !u!54 &7553693288818093790
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390405242506728753}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4244245137146736683
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +170,7 @@ GameObject:
   - component: {fileID: 7526007949487638608}
   - component: {fileID: 7635720326302409760}
   - component: {fileID: 5026579431974887011}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7924274643888151482}
   - component: {fileID: 1797890723542598825}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Area Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,5 +330,6 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0

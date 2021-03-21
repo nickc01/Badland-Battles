@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
 		if (Target != null)
 		{
 			//Linearly interpolate to the new position. The position is the target's position plus the offset
-			transform.position = Vector3.Lerp(transform.position,Target.transform.position + Offset,Time.deltaTime * movementSpeed);
+			transform.position = Vector3.Lerp(transform.position,Target.transform.position + Offset,Time.unscaledDeltaTime * movementSpeed);
 			//If the camera rotates towards the target
 			if (rotateTowardsTarget)
 			{
@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
 				var newRotation = transform.rotation;
 
 				//Interpolate between the old and new rotations
-				transform.rotation = Quaternion.Lerp(oldRotation, newRotation, Time.deltaTime * rotationSpeed);
+				transform.rotation = Quaternion.Lerp(oldRotation, newRotation, Time.unscaledDeltaTime * rotationSpeed);
 			}
 		}
 	}

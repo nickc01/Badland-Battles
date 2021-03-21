@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3559157345389882786}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bolt_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9011111545146318382}
   - component: {fileID: 1870195441380640737}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Area Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,6 +120,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!1 &2030100931940690653
@@ -132,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4514537982779110571}
   - component: {fileID: 3074951659631079156}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8288463552596903005}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +251,8 @@ GameObject:
   - component: {fileID: 5301172584538257465}
   - component: {fileID: 367607243470738155}
   - component: {fileID: 6834335007215662184}
-  m_Layer: 0
+  - component: {fileID: 6480571476881808435}
+  m_Layer: 10
   m_Name: AK-47 Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +301,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf40eab264beb44c987f710adb9da57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 0}
+  weaponPrefab: {fileID: 1761076502509189768, guid: fda523b44d426c54fa53b3a4c9457df8, type: 3}
+--- !u!54 &6480571476881808435
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2219196077404375398}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8706167969547925535
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 466025406902528881}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Armature
   m_TagString: Untagged
   m_Icon: {fileID: 0}

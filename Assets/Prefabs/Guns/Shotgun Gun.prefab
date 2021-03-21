@@ -228,6 +228,8 @@ MonoBehaviour:
   shotInaccuracy: 0.15
   fireRate: 1
   ammoPerShot: 5
+  displayText: Shotgun
+  displayImage: {fileID: 21300000, guid: 96aa7149fa6553547a4a85af351f568d, type: 3}
   amountOfShots: 5
 --- !u!1 &4071133348320652475
 GameObject:

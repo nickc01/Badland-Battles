@@ -113,6 +113,9 @@ public class EnemyWaveManager : MonoBehaviour
 
 	IEnumerator WaveRunner()
 	{
+		//Wait untill the game has started
+		yield return new WaitUntil(() => GameManager.Instance.GameStarted);
+
 		//Waits for the starting delay
 		yield return new WaitForSeconds(startDelay);
 

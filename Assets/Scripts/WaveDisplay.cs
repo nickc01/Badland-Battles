@@ -41,7 +41,9 @@ public class WaveDisplay : MonoBehaviour
 
 	IEnumerator Movement()
 	{
+		//Enable the wave display
 		waveTextObject.gameObject.SetActive(true);
+		//Move the wave display down so it's visible
 		while (_timer < 1f)
 		{
 			_timer += movementSpeed * Time.deltaTime;
@@ -54,8 +56,10 @@ public class WaveDisplay : MonoBehaviour
 		_timer = 1f;
 		TextPivot = movementCurve.Evaluate(_timer);
 
+		//Wait the screen time delay
 		yield return new WaitForSeconds(screenTime);
 
+		//Move the wave display up so it's not visible
 		while (_timer > 0f)
 		{
 			_timer -= movementSpeed * Time.deltaTime;
@@ -66,6 +70,7 @@ public class WaveDisplay : MonoBehaviour
 		}
 
 		_timer = 0f;
+		//Disable the wave display
 		waveTextObject.gameObject.SetActive(false);
 	}
 }

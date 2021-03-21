@@ -146,6 +146,8 @@ MonoBehaviour:
   shotInaccuracy: 0.1
   fireRate: 10
   ammoPerShot: 1
+  displayText: AK-47
+  displayImage: {fileID: 21300000, guid: 450a7217f223fc242b2c3916452908d7, type: 3}
 --- !u!1 &6312474104799599247
 GameObject:
   m_ObjectHideFlags: 0

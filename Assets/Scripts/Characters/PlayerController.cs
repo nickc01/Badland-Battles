@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class PlayerController : Character
@@ -21,6 +22,21 @@ public class PlayerController : Character
     [SerializeField]
     [Tooltip("The amount of force propelled upwards when the player jumps")]
     float jumpForce = 10f;
+    [SerializeField]
+    [Tooltip("The amount of lives the player starts with")]
+    int lives = 3;
+
+    [Space]
+    [Header("Player Events")]
+    [SerializeField]
+    [Tooltip("Called anytime the player spawns/respawns in the game")]
+    UnityEvent OnPlayerRespawn;
+    [SerializeField]
+    [Tooltip("Called when the player looses a life. Also returns how many lives the player has left")]
+    UnityEvent<int> OnLiveLost;
+    [SerializeField]
+    [Tooltip("Called when all the player's lives are lost")]
+    UnityEvent OnGameOver;
 
 
     //The rigidbody of the player
@@ -35,6 +51,10 @@ public class PlayerController : Character
     int landingID;
     //The ID used to set the "On Ground" animator parameter
     int onGroundID;
+
+
+    //The position the player started at
+    Vector3 startPosition;
 
 
     //Whether the player is jumping
@@ -52,6 +72,7 @@ public class PlayerController : Character
 
     private void Awake()
     {
+        startPosition = transform.position;
         //Set the singleton
         Instance = this;
 
@@ -73,9 +94,26 @@ public class PlayerController : Character
         //Update the Ammo HUD
         AmmoHUD.Instance.SetMaxAmmo(MaxAmmo);
         AmmoHUD.Instance.UpdateAmmoRaw(Ammo);
+
+		if (OnPlayerRespawn != null)
+		{
+            OnPlayerRespawn.Invoke();
+        }
     }
 
-    protected override void Update()
+	protected override void OnEquip()
+	{
+        WeaponIconHUD.Instance.SetWeaponImage(EquippedWeapon.DisplayImage, EquippedWeapon.DisplayText);
+        base.OnEquip();
+	}
+
+	protected override void OnUnequip()
+	{
+        WeaponIconHUD.Instance.SetWeaponImage(null, "");
+        base.OnUnequip();
+	}
+
+	protected override void Update()
     {
         base.Update();
 
@@ -89,7 +127,7 @@ public class PlayerController : Character
                 animator.SetBool(onGroundID, OnGround);
             }
 
-            if (OnGround)
+            if (OnGround && !GameManager.Instance.GamePaused)
             {
                 //The movement vector along the X and Z axis
                 //The Raw version is used here, since we don't need the axis' to be interpolated. The interpolation is already handled further below
@@ -117,7 +155,7 @@ public class PlayerController : Character
             }
 
             //If we are pressing space or pressing the fire button and the player is on the ground
-            if ((Input.GetKeyDown(KeyCode.Space)) && OnGround)
+            if ((Input.GetKeyDown(KeyCode.Space)) && OnGround && !GameManager.Instance.GamePaused)
             {
                 animator.Play("Jumping");
                 //Jump
@@ -134,7 +172,7 @@ public class PlayerController : Character
                 WeaponTarget = target;
 
                 //If the fire button is pressed
-                if (Input.GetButton("Fire1") && CanFireWeapon)
+                if (Input.GetButton("Fire1") && CanFireWeapon && !GameManager.Instance.GamePaused)
                 {
                     //Fire a ray wherever the mouse is pointing at
                     Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -159,7 +197,7 @@ public class PlayerController : Character
     private void FixedUpdate()
     {
         //If we are not on the ground, then do movement by modifying the rigidbody velocity to move in the air
-        if (!IsDead && !OnGround)
+        if (!IsDead && !OnGround && !GameManager.Instance.GamePaused)
         {
             //Set the x velocity to the horizontal input axis and the z axis to the vertical input axis
             body.velocity = new Vector3(Input.GetAxis("Horizontal") * MovementSpeed, body.velocity.y, Input.GetAxis("Vertical") * MovementSpeed);
@@ -180,18 +218,19 @@ public class PlayerController : Character
         {
             //Convert the distance value to a 3d point value. This point is where the ray collided with the plane
             var collisionPoint = mouseRay.GetPoint(distanceToPlane);
+            if (!GameManager.Instance.GamePaused)
+            {
+                //Store the previous rotation
+                var previousRotation = transform.rotation;
 
-            //Store the previous rotation
-            var previousRotation = transform.rotation;
+                //Look at the collision point
+                transform.LookAt(collisionPoint);
 
-            //Look at the collision point
-            transform.LookAt(collisionPoint);
-
-            //Get the updated rotation
-            var newRotation = transform.rotation;
-
-            //Interpolate from the previous rotation to the new rotation
-            transform.rotation = Quaternion.Lerp(previousRotation, newRotation, RotationSpeed * Time.deltaTime);
+                //Get the updated rotation
+                var newRotation = transform.rotation;
+                //Interpolate from the previous rotation to the new rotation
+                transform.rotation = Quaternion.Lerp(previousRotation, newRotation, RotationSpeed * Time.deltaTime);
+            }
 
             return collisionPoint;
         }
@@ -223,5 +262,53 @@ public class PlayerController : Character
     {
         //Update the ammo HUD
         AmmoHUD.Instance.UpdateAmmo(ammo);
+    }
+
+    public void LooseLife()
+	{
+        lives--;
+		if (OnLiveLost != null)
+		{
+            OnLiveLost.Invoke(lives);
+		}
+		if (lives == 0 && OnGameOver != null)
+		{
+            OnGameOver.Invoke();
+		}
+	}
+
+    /// <summary>
+    /// Respawns the player after a set amount of time
+    /// </summary>
+    /// <param name="time">Time to respawn</param>
+    public void RespawnPlayer(float time)
+	{
+        //If the player has lives left
+		if (lives > 0)
+		{
+            //Respawn the player
+            StartCoroutine(RespawnRoutine(time));
+        }
+	}
+
+    IEnumerator RespawnRoutine(float time)
+	{
+        //Wait a specified amoutn of time
+        yield return new WaitForSeconds(time);
+
+        //Disable the ragdolling
+        GetComponent<RagdollManager>().DisableRagdoll();
+
+        //Move the player to it's spawn location
+        transform.position = startPosition;
+
+        //Heal the player to it's full health
+        CharacterHealth.Heal(CharacterHealth.InitialHealth);
+
+        //Call the respawner event
+		if (OnPlayerRespawn != null)
+		{
+            OnPlayerRespawn.Invoke();
+		}
     }
 }

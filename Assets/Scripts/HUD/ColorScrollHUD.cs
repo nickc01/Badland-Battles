@@ -20,6 +20,10 @@ public abstract class ColorScrollHUD : MonoBehaviour
 	[SerializeField]
 	[Tooltip("Used to display a number in the color bar")]
 	TextMeshProUGUI numberText;
+	[SerializeField]
+	[Tooltip("Any prefix to be added before the number if any")]
+	string numberPrefix;
+
 
 	//Stores the current percentage value of the color bar
 	float currentPercentage = 1f;
@@ -50,7 +54,7 @@ public abstract class ColorScrollHUD : MonoBehaviour
 		//Update the current percentage
 		currentPercentage = value / maxValue;
 		//Update the number text
-		numberText.text = value.ToString();
+		numberText.text = numberPrefix + value.ToString();
 	}
 
 	/// <summary>
@@ -63,7 +67,7 @@ public abstract class ColorScrollHUD : MonoBehaviour
 		//Update the current percentage
 		currentPercentage = value / (float)maxValue;
 		//Update the number text
-		numberText.text = value.ToString();
+		numberText.text = numberPrefix + value.ToString();
 	}
 
 	//Sets the color progress instantly. No animated interpolations are applied
@@ -88,7 +92,7 @@ public abstract class ColorScrollHUD : MonoBehaviour
 	protected void SetColorProgressRaw(float value, float maxValue)
 	{
 		SetColorProgressRaw(value / maxValue);
-		numberText.text = value.ToString();
+		numberText.text = numberPrefix + value.ToString();
 	}
 
 	/// <summary>
@@ -99,7 +103,7 @@ public abstract class ColorScrollHUD : MonoBehaviour
 	protected void SetColorProgressRaw(int value, int maxValue)
 	{
 		SetColorProgressRaw(value / (float)maxValue);
-		numberText.text = value.ToString();
+		numberText.text = numberPrefix + value.ToString();
 	}
 
 }

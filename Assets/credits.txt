@@ -9,3 +9,6 @@ Shotgun : https://opengameart.org/content/shotgun-1
 Tank : https://opengameart.org/content/stridsvagn-103
 Bullet Hole : https://opengameart.org/content/bullet-decal
 Gun and Bullet Effects : https://assetstore.unity.com/packages/vfx/particles/war-fx-5669
+More Icons : https://opengameart.org/content/95-game-icons
+AK-47 ICON : https://opengameart.org/content/ak-47-flat-design-ai-files
+UI Elements : https://opengameart.org/content/assets-ui-different-free-2-icons-bars-buttons

@@ -85,9 +85,11 @@ MonoBehaviour:
   flashRange: 5
   flashTime: 0.03
   bulletDamage: 5
-  shotAccuracy: 0.2
+  shotInaccuracy: 0
   fireRate: 1.25
   ammoPerShot: 1
+  displayText: M1911
+  displayImage: {fileID: 21300000, guid: 6959c09ab6e467149ba25a9eb88e696f, type: 3}
 --- !u!1 &1965876893572006106
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,15 +41,15 @@ public class Health : MonoBehaviour
 	/// <summary>
 	/// The starting health
 	/// </summary>
-	public float InitialHealth => initialHealth;
+	public int InitialHealth => initialHealth;
 	/// <summary>
 	/// The maximum health
 	/// </summary>
-	public float MaxHealth => maxHealth;
+	public int MaxHealth => maxHealth;
 	/// <summary>
 	/// The current health value
 	/// </summary>
-	public float CurrentHealth => health;
+	public int CurrentHealth => health;
 
 	/// <summary>
 	/// Heals the health component by a set amount

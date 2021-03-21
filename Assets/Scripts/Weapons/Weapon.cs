@@ -34,7 +34,17 @@ public abstract class Weapon : MonoBehaviour
 	[SerializeField]
 	[Tooltip("How much ammo the weapon consumes per shot")]
 	protected int ammoPerShot = 1;
+	[Space]
+	[Header("HUD")]
+	[SerializeField]
+	[Tooltip("The text that will be displayed on the weapon HUD")]
+	string displayText;
+	[SerializeField]
+	[Tooltip("The image that will be displayed on the weapon HUD")]
+	Sprite displayImage;
 
+	public string DisplayText => displayText;
+	public Sprite DisplayImage => displayImage;
 	public int AmmoPerShot => ammoPerShot;
 
 	//Represents where the right hand should be

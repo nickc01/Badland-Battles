@@ -143,13 +143,13 @@ public class RagdollManager : MonoBehaviour
 	}
 
 	//Causes the enemy to sink into the ground
-	public void SinkIntoGround()
+	public void SinkIntoGround(bool destroyOnDone)
 	{
 		//Start the sink routine
-		StartCoroutine(SinkRoutine());
+		StartCoroutine(SinkRoutine(destroyOnDone));
 	}
 
-	IEnumerator SinkRoutine()
+	IEnumerator SinkRoutine(bool destroyOnDone)
 	{
 		//Wait for the specified delay
 		yield return new WaitForSeconds(waitTimeBeforeSinking);
@@ -174,8 +174,11 @@ public class RagdollManager : MonoBehaviour
 			transform.position = new Vector3(transform.position.x,Mathf.Lerp(previousHeight,newHeight,i / sinkTime),transform.position.z);
 		}
 
-		//Destroy the enemy
-		Destroy(gameObject);
+		if (destroyOnDone)
+		{
+			//Destroy the enemy
+			Destroy(gameObject);
+		}
 	}
 
 	//Checks if a name satifies one or many filters

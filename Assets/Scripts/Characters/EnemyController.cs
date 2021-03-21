@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+
 
 public class EnemyController : Character
 {
@@ -12,7 +12,7 @@ public class EnemyController : Character
 	[Header("Enemy Properties")]
 	[SerializeField]
 	[Tooltip("The target the enemy should go towards")]
-	Transform target;
+	PlayerController target;
 	[SerializeField]
 	[Tooltip("An offset to the target position. Used to aim the gun at the right spot")]
 	Vector3 targetOffset;
@@ -25,12 +25,18 @@ public class EnemyController : Character
 	[SerializeField]
 	[Tooltip("How fast the enemy should rotate towards the target")]
 	float rotationSpeed = 5f;
+	[SerializeField]
+	[Tooltip("A list of drops that can drop from the enemy when it dies")]
+	List<DropChance> Drops;
+	[SerializeField]
+	[Tooltip("An offset applied to the spawn position of the drop")]
+	Vector3 dropSpawnOffset;
 
 	//The nav mesh of the enemy
 	NavMeshAgent navAgent;
 
 	//The target the enemy will move towards
-	public Transform Target
+	public PlayerController Target
 	{
 		get => target;
 		set => target = value;
@@ -50,7 +56,7 @@ public class EnemyController : Character
 		}
 
 		//Set the main target to the player
-		Target = PlayerController.Instance.transform;
+		Target = PlayerController.Instance;
 	}
 
 
@@ -58,14 +64,14 @@ public class EnemyController : Character
 	{
 		base.Update();
 		//If the target is set and the nav mesh is enabled
-		if (target != null && navAgent.enabled)
+		if (target != null && navAgent.enabled && !GameManager.Instance.GamePaused)
 		{
 			//Make the nav mesh move to the target
-			navAgent.SetDestination(target.position);
+			navAgent.SetDestination(target.transform.position);
 		}
 
-		//If the enemy is not dead and a target is set
-		if (!IsDead && target != null)
+		//If the enemy is not dead and a target is set and the target is not dead
+		if (!IsDead && target != null && target.CharacterHealth.CurrentHealth > 0 && !GameManager.Instance.GamePaused)
 		{
 			//Get the velocity the nav mesh wants to move at
 			Vector3 movementVector = navAgent.desiredVelocity;
@@ -80,16 +86,16 @@ public class EnemyController : Character
 			Movement = new Vector2(movementVector.x, movementVector.z);
 
 			//If the target is within shooting range
-			if (Vector3.Distance(transform.position, target.position + targetOffset) <= shootingRange)
+			if (Vector3.Distance(transform.position, target.transform.position + targetOffset) <= shootingRange)
 			{
 				//Look towards the target
-				LookAt(target.position + targetOffset);
+				LookAt(target.transform.position + targetOffset);
 
 				//If the weapon can be fired and the enemy is within line of sight
-				if (CanFireWeapon && InLineOfSight(target.position + targetOffset))
+				if (CanFireWeapon && InLineOfSight(target.transform.position + targetOffset))
 				{
 					//Fire the weapon
-					FireWeapon(target.position + targetOffset);
+					FireWeapon(target.transform.position + targetOffset);
 				}
 			}
 			//If the target is not within shooting range
@@ -122,11 +128,50 @@ public class EnemyController : Character
 
 		var newRotation = transform.rotation;
 
-		//Interpolate to the new rotation
-		transform.rotation = Quaternion.Lerp(oldRotation,newRotation, rotationSpeed * Time.deltaTime);
+		if (!GameManager.Instance.GamePaused)
+		{
+			//Interpolate to the new rotation
+			transform.rotation = Quaternion.Lerp(oldRotation, newRotation, rotationSpeed * Time.deltaTime);
 
-		//Do not change the x and z axis, only the y axis
-		transform.eulerAngles = new Vector3(oldRotation.x, transform.rotation.eulerAngles.y, oldRotation.z);
+			//Do not change the x and z axis, only the y axis
+			transform.eulerAngles = new Vector3(oldRotation.x, transform.rotation.eulerAngles.y, oldRotation.z);
+		}
+	}
+
+	/// <summary>
+	/// Causes the enemy to drop an item based on a set of weights
+	/// </summary>
+	public void DoDrop()
+	{
+		//Represents the cumulative densities of the drops
+		List<float> CDFArray = new List<float>();
+		//Add all the cumulative densities of all the configured drops
+		for (int i = 0; i < Drops.Count; i++)
+		{
+			if (i == 0)
+			{
+				CDFArray.Add(Drops[i].Chance);
+			}
+			else
+			{
+				CDFArray.Add(Drops[i].Chance + CDFArray[i - 1]);
+			}
+		}
+
+		//Do a binary search for a random value in the CDF Array
+		int selectedDropIndex = CDFArray.BinarySearch(UnityEngine.Random.Range(0f,CDFArray[CDFArray.Count - 1]));
+		//If the index is negative, then flip it to a positive one
+		if (selectedDropIndex < 0)
+		{
+			selectedDropIndex = ~selectedDropIndex;
+		}
+
+		//If a drop is configured at that index
+		if (Drops[selectedDropIndex].Drop != null)
+		{
+			//Instantiate the drop at the enemy's location
+			GameObject.Instantiate(Drops[selectedDropIndex].Drop,transform.position + dropSpawnOffset, Quaternion.identity);
+		}
 	}
 }
 
