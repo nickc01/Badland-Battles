@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public sealed class DoublePistolWeapon : Weapon
 {
@@ -22,11 +23,15 @@ public sealed class DoublePistolWeapon : Weapon
 		{
 			//Shoot bullet from the first gun
 			ShootBullet(muzzle1.transform.position, target);
+			//Play a random pistol sound
+			GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.PistolSounds.GetRandom(), muzzle1.transform.position);
 		}
 		else
 		{
 			//Shoot bullet from the second gun
 			ShootBullet(muzzle2.transform.position, target);
+			//Play a random pistol sound
+			GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.PistolSounds.GetRandom(), muzzle2.transform.position);
 		}
 
 		//Flip to the other gun

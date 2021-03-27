@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 //The class representing the Shotgun weapon
 public sealed class ShotgunWeapon : Weapon
@@ -11,6 +12,8 @@ public sealed class ShotgunWeapon : Weapon
 
 	public override void Shoot(Vector3 muzzle, Vector3 target)
 	{
+		//Play a random shotgun sound
+		GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.ShotgunSounds.GetRandom(), muzzle);
 		//Decrease the flash intensity by the amount of shots, since the flashes are going to stack on top of each other
 		flashIntensity /= amountOfShots;
 		//Run the shoot code for as many shots are needed

@@ -78,6 +78,8 @@ public class HealthMarker : MonoBehaviour
 
         //Get the rect transform of the marker
         rectTransform = GetComponent<RectTransform>();
+
+        rectTransform.anchoredPosition = Vector2.zero;
     }
 
     private void Update()
@@ -96,8 +98,10 @@ public class HealthMarker : MonoBehaviour
         //Convert the world-coordinates of the target to screen coordinates
         Vector2 screenCoordinates = (Vector2)camera.WorldToScreenPoint(position) + ScreenOffset;
 
-        //Set the marker to the screen coordinates
-        rectTransform.anchoredPosition = screenCoordinates;
+        var viewpointPosition = camera.ScreenToViewportPoint(screenCoordinates);
+
+        rectTransform.anchorMin = viewpointPosition;
+        rectTransform.anchorMax = viewpointPosition;
 
         //Retrieve the new width for the color bar
         float colorBarWidth = Mathf.Lerp(0f, bottomBar.rect.width, health / maxHealth);

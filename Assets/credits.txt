@@ -12,3 +12,16 @@ Gun and Bullet Effects : https://assetstore.unity.com/packages/vfx/particles/war
 More Icons : https://opengameart.org/content/95-game-icons
 AK-47 ICON : https://opengameart.org/content/ak-47-flat-design-ai-files
 UI Elements : https://opengameart.org/content/assets-ui-different-free-2-icons-bars-buttons
+Gun Sounds : https://opengameart.org/content/q009s-weapon-sounds
+Other Textures : https://opengameart.org/content/terrain-textures-pack-from-stunt-rally-23?page=1
+Torches : https://opengameart.org/content/lowpoly-modular-dungeon
+Water Texture : https://opengameart.org/content/3-live-proceduraly-generated-tiling-water-textures-512px-running-brushes
+UI Sound Effects : https://opengameart.org/content/ui-sound-effects-library
+Muzzle Flash : https://opengameart.org/content/muzzle-flash-with-model
+Hit Flash : https://opengameart.org/content/hit-animation-2-frame-by-frame
+Reload Sound : https://opengameart.org/content/handgun-reload-sound-effect
+Music {
+	Drums of the Deep : Kevin Macleod
+	Stormfront : Kevin Macleod
+}
+

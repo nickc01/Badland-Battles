@@ -10,6 +10,8 @@ public sealed class AmmoPack : Pickup
 	{
 		//On pickup, increase the character's ammo
 		sourceCharacter.Ammo += ammoAmount;
+
+		GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.ReloadSound, transform.position);
 	}
 }
 

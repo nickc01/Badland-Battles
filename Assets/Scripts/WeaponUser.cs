@@ -127,6 +127,11 @@ public abstract class WeaponUser : MonoBehaviour
     //Tells the player to equip a weapon
     public void EquipWeapon(Weapon weaponPrefab)
     {
+		if (weaponPrefab == null)
+		{
+            return;
+		}
+
         //If the player is already holding a weapon, then unequip it
         if (EquippedWeapon != null)
         {

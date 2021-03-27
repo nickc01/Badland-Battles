@@ -141,7 +141,7 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0.9161716, b: 0, a: 1}
   flashIntensity: 3
   flashRange: 5
-  flashTime: 0.03
+  flashTime: 0.1
   bulletDamage: 5
   shotInaccuracy: 0.1
   fireRate: 10
@@ -310,6 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 0}
+  ammoAmount: 50
 --- !u!1 &7414933341257928462
 GameObject:
   m_ObjectHideFlags: 0

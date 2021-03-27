@@ -171,7 +171,8 @@ public abstract class Weapon : MonoBehaviour
 		if (GameManager.Instance.GunHitPrefab != null)
 		{
 			var hitFlash = GameObject.Instantiate(GameManager.Instance.GunHitPrefab, hitPoint, Quaternion.identity);
-			Destroy(hitFlash, flashTime);
+			hitFlash.DisableLightAfter(flashTime);
+			//Destroy(hitFlash, flashTime);
 		}
 
 		//If the hit object contains a health component, then subtract from it's health

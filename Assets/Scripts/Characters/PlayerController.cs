@@ -25,6 +25,9 @@ public class PlayerController : Character
     [SerializeField]
     [Tooltip("The amount of lives the player starts with")]
     int lives = 3;
+    [SerializeField]
+    [Tooltip("The weapon the player will start with")]
+    Weapon startingWeapon;
 
     [Space]
     [Header("Player Events")]
@@ -95,6 +98,8 @@ public class PlayerController : Character
         AmmoHUD.Instance.SetMaxAmmo(MaxAmmo);
         AmmoHUD.Instance.UpdateAmmoRaw(Ammo);
 
+        EquipWeapon(startingWeapon);
+
 		if (OnPlayerRespawn != null)
 		{
             OnPlayerRespawn.Invoke();
@@ -121,7 +126,7 @@ public class PlayerController : Character
         {
 
             //If the player is on the ground
-            if (OnGround)
+            if (OnGround && body.velocity.y <= 0f)
             {
                 //Update the animation parameter
                 animator.SetBool(onGroundID, OnGround);
@@ -146,7 +151,6 @@ public class PlayerController : Character
 
             //Look at the mouse pointer and get the target that the mouse is pointing at
             var target = LookAtMouse();
-
             //If the player is jumping in the air and the player is falling down
             if (Jumping && body.velocity.y <= 0f)
             {
@@ -161,7 +165,7 @@ public class PlayerController : Character
                 //Jump
                 Jumping = true;
 
-                animator.SetBool(onGroundID, OnGround);
+                animator.SetBool(onGroundID, false);
                 //Add a jump force
                 body.AddRelativeForce(0f, jumpForce, 0f, ForceMode.Impulse);
             }
@@ -304,6 +308,7 @@ public class PlayerController : Character
 
         //Heal the player to it's full health
         CharacterHealth.Heal(CharacterHealth.InitialHealth);
+        Ammo = MaxAmmo;
 
         //Call the respawner event
 		if (OnPlayerRespawn != null)

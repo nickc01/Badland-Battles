@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29d7becd8ea73e48bac09b2077ebd4e, type: 3}
+  m_Name: Game Audio Database
+  m_EditorClassIdentifier: 
+  PistolSounds:
+  - {fileID: 8300000, guid: 87ab2cba4002bcc45a93d6d4d0df4ed4, type: 3}
+  - {fileID: 8300000, guid: 5f7c39e893434d441bd9cee6b123fc6b, type: 3}
+  - {fileID: 8300000, guid: f6169e8af1b184043a4f157b00a4be03, type: 3}
+  ShotgunSounds:
+  - {fileID: 8300000, guid: 5517c288b0ca88a4486470570f58bdfb, type: 3}
+  - {fileID: 8300000, guid: b08c676cdd6701a4cb89a76c5c64cc34, type: 3}
+  - {fileID: 8300000, guid: c8e4c2d3cd512604fa9d1845f34c3f76, type: 3}
+  DeathSounds:
+  - {fileID: 8300000, guid: b84f7749615ae9043a6e181ac3f721d9, type: 3}
+  - {fileID: 8300000, guid: 3c2c66658e52c574fae8414fb6596d0f, type: 3}
+  - {fileID: 8300000, guid: 99546edc941a9234d90d72c1771278c5, type: 3}
+  - {fileID: 8300000, guid: eacd26b105a05f14fa4c85d9ef30d761, type: 3}
+  - {fileID: 8300000, guid: 6d3b4bd689de20646add09968a56be2a, type: 3}
+  - {fileID: 8300000, guid: faeb6212c6e3d86449b3ef7d32e53d6c, type: 3}
+  - {fileID: 8300000, guid: febfc200d9a6c0c48a3f341bf52da1a6, type: 3}
+  - {fileID: 8300000, guid: fcb4d9fcf1f6451428bcc953629ff405, type: 3}
+  - {fileID: 8300000, guid: 073288da24bb51a4389e64bb3043558a, type: 3}
+  - {fileID: 8300000, guid: 96a712964e052e547ba1f306ab6ffa22, type: 3}
+  - {fileID: 8300000, guid: 7144489752c9e714785ab254b5c2f131, type: 3}
+  - {fileID: 8300000, guid: 60074dcc7ee0d1f48b033684af916fee, type: 3}
+  - {fileID: 8300000, guid: 738c05a65d61e7d49b6d79f87587ed55, type: 3}
+  - {fileID: 8300000, guid: 4fa040176ab9155408c90f6626c5c534, type: 3}
+  - {fileID: 8300000, guid: a0fa9174e24d0e543b1dc2bf1bec8bd0, type: 3}
+  ReloadSound: {fileID: 8300000, guid: 7f8e7e2b398de754d8de216369cc22d7, type: 3}
+  MasterAudioGroup: {fileID: 24300002, guid: 3a1d48ae44536bd4cb1efa1b32e564f9, type: 2}
+  SFXAudioGroup: {fileID: 3069873021702779059, guid: 3a1d48ae44536bd4cb1efa1b32e564f9, type: 2}
+  MusicAudioGroup: {fileID: 7643387772078130368, guid: 3a1d48ae44536bd4cb1efa1b32e564f9, type: 2}
+  AudioPrefab: {fileID: 6849130436295378341, guid: 9bcceb01260146143969c22516b65443, type: 3}

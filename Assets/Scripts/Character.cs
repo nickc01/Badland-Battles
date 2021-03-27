@@ -95,6 +95,15 @@ public abstract class Character : WeaponUser
 			{
 				var animatorMovement = _movement * movementSpeed;
 
+				if (animatorMovement.magnitude > 3f)
+				{
+					animator.speed = animatorMovement.magnitude / 3f;
+				}
+				else
+				{
+					animator.speed = 1f;
+				}
+
 				//Get the old values
 				var oldHorizontal = animator.GetFloat(m_horizontalID);
 				var oldVertical = animator.GetFloat(m_verticalID);
@@ -182,5 +191,14 @@ public abstract class Character : WeaponUser
 			//Damage the character
 			damager.OnHit(this);
 		}
+	}
+
+	/// <summary>
+	/// Plays a sound on death
+	/// </summary>
+	public void PlayDeathSound()
+	{
+		//Plays a random death sound at the character's location
+		GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.DeathSounds.GetRandom(), transform.position);
 	}
 }

@@ -13,12 +13,12 @@ public class GameManager : MonoBehaviour
 	[Header("Weapon System")]
 	[SerializeField]
 	[Tooltip("The prefab that is instantiated at the nuzzle of the gun to replicate a gun flash")]
-	GameObject gunFirePrefab;
-	public GameObject GunFirePrefab => gunFirePrefab;
+	MuzzleFlash gunFirePrefab;
+	public MuzzleFlash GunFirePrefab => gunFirePrefab;
 	[SerializeField]
 	[Tooltip("The prefab that is instantiated at the target that replicates a bullet hit")]
-	GameObject gunHitPrefab;
-	public GameObject GunHitPrefab => gunHitPrefab;
+	HitFlash gunHitPrefab;
+	public HitFlash GunHitPrefab => gunHitPrefab;
 	[SerializeField]
 	[Tooltip("The prefab that is used to represent the path of the bullet from the source to the target. This can be used to create a ray that shows where the bullet traveled")]
 	GameObject gunRayPrefab;
@@ -162,5 +162,24 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = 1f;
 		//Load the main menu scene
 		GameLoader.LoadScene(mainMenuScene);
+	}
+
+	/// <summary>
+	/// Returns to the main menu after a set delay
+	/// </summary>
+	/// <param name="time"></param>
+	public void ReturnToMainMenuAfterTime(float time)
+	{
+		//Star the return to main menu routine
+		StartCoroutine(ReturnToMainMenuRoutine(time));
+	}
+
+	//Returns to the main menu after a set delay
+	IEnumerator ReturnToMainMenuRoutine(float time)
+	{
+		//Wait the specified delay
+		yield return new WaitForSeconds(time);
+		//Return to the main menu
+		BackToMainMenu();
 	}
 }

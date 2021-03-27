@@ -14,6 +14,8 @@ public sealed class Medipack : Pickup
 	{
 		//On pickup, heal the character
 		sourceCharacter.GetComponent<Health>().Heal(healAmount);
+
+		GameAudioSource.PlayAudioOnce(AudioDatabase.Instance.ReloadSound, transform.position);
 	}
 }
 

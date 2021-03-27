@@ -169,8 +169,9 @@ public class EnemyController : Character
 		//If a drop is configured at that index
 		if (Drops[selectedDropIndex].Drop != null)
 		{
+			var drop = Drops[selectedDropIndex].Drop;
 			//Instantiate the drop at the enemy's location
-			GameObject.Instantiate(Drops[selectedDropIndex].Drop,transform.position + dropSpawnOffset, Quaternion.identity);
+			GameObject.Instantiate(drop, transform.position + dropSpawnOffset, drop.transform.rotation);
 		}
 	}
 }

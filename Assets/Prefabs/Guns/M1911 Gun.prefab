@@ -83,7 +83,7 @@ MonoBehaviour:
   flashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   flashIntensity: 1
   flashRange: 5
-  flashTime: 0.03
+  flashTime: 0.1
   bulletDamage: 5
   shotInaccuracy: 0
   fireRate: 1.25

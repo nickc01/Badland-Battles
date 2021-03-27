@@ -11,9 +11,21 @@ PrefabInstance:
       propertyPath: startingWeapon
       value: 
       objectReference: {fileID: 1499266324728903138, guid: 08665a99e4be93e4cb6e57dac49c752f, type: 3}
+    - target: {fileID: 919132148015575987, guid: 27a0331e271687a40aa9a2208924bd65, type: 3}
+      propertyPath: Drops.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148015575987, guid: 27a0331e271687a40aa9a2208924bd65, type: 3}
+      propertyPath: Drops.Array.data[3].Drop
+      value: 
+      objectReference: {fileID: 1698852499057797385, guid: 32c121e52dec2ae4da10b6e991ed6b77, type: 3}
+    - target: {fileID: 919132148015575987, guid: 27a0331e271687a40aa9a2208924bd65, type: 3}
+      propertyPath: Drops.Array.data[3].Chance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6179647463071044947, guid: 27a0331e271687a40aa9a2208924bd65, type: 3}
       propertyPath: m_Name
-      value: Enemy Soldier - No Weapon
+      value: Enemy Soldier - M1911
       objectReference: {fileID: 0}
     - target: {fileID: 6812068326115512297, guid: 27a0331e271687a40aa9a2208924bd65, type: 3}
       propertyPath: m_RootOrder

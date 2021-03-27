@@ -122,4 +122,11 @@ public class MenuSystem : MonoBehaviour
 		Application.Quit();
 #endif
 	}
+
+	//Plays a UI sound effect
+	public void PlaySoundEffect(AudioClip clip)
+	{
+		//Play a sound effect that is not used in 3D space
+		GameAudioSource.PlayGlobalSound(clip);
+	}
 }

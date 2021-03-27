@@ -1953,6 +1953,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 919132148015575987}
+        m_TargetAssemblyTypeName: Character, Assembly-CSharp
+        m_MethodName: PlayDeathSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHeal:
     m_PersistentCalls:
       m_Calls: []
@@ -2004,12 +2016,12 @@ MonoBehaviour:
   AnimationTransitionSpeed: 3
   target: {fileID: 0}
   targetOffset: {x: 0, y: 1, z: 0}
-  startingWeapon: {fileID: 766671560714249059, guid: 3fc4ddb711788e942b5629ea6ef6c3c2, type: 3}
+  startingWeapon: {fileID: 0}
   shootingRange: 7
   rotationSpeed: 5
   Drops:
   - Drop: {fileID: 0}
-    Chance: 5
+    Chance: 3
   - Drop: {fileID: 1634332232440951134, guid: ad4124841c1f4914f91374e548cefb49, type: 3}
     Chance: 2
   - Drop: {fileID: 7747883690573347457, guid: 94f030414a52f7e4ab8e6b507ee8815c, type: 3}
